@@ -9,27 +9,29 @@ import requests
 import xml.etree.ElementTree as ET
 
 
-def get_location():
-    """  """
-
-
 def get_id():
     """ Get vehicle ID for fueleconomy.gov XML API """
 
-    # year = input("What year?\n").lower()
-    # make = input("What is the make?\n").lower()
-    # model = input("What is the model?\n").lower()
-
+    # Hardcoded for now
     year = 2006
     make = 'honda'
     model = 'accord'
 
     url = "http://fueleconomy.gov/ws/rest/vehicle/menu/options?year={}&make={}&model={}".format(year, make, model)
     r = requests.get(url)
-    tree = ET.fromstring(r.content)
-    print(tree)
+    root = ET.fromstring(r.content)
 
-    #TODO: Parse XML
+    version = root[0][0].text       # Auto 5-spd, 4 cyl, 2.4 L
+    vehicle_id = root[0][1].text    # 21960
+
+    # Need to properly iterate through all car options, not just first (TODO)
+    return vehicle_id, version
+
+print(get_id())
+
+
+def get_gas():
+    """ Get Gas info from fueleconomy.gov XML API """
 
 
 def uber():
