@@ -38,9 +38,11 @@ def get_gas():
     root = ET.fromstring(r.content)
 
     avg_mpg = root[0].text         # 27.89997198
+    city_percent = root[1].text    # 39
+    highway_percent = root[2].text # 61
     max_mpg = root[3].text         # 38
     min_mpg = root[4].text         # 20
-    
+
     print(avg_mpg)
 
 get_gas()
