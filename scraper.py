@@ -6,19 +6,9 @@ class GasPrice(object):
     "Tool for gathering gas price data for Canadian provinces"
 
     def __init__(self):
-        self.prices = {
-            'AB': None,
-            'SK': None,
-            'MB': None,
-            'ON': None,
-            'PE': None,
-            'NB': None,
-            'NS': None,
-            'QC': None,
-            'BC': None,
-            'NT': None,
-            'NF': None,
-        }
+        self.provinces = ['AB', 'SK', 'MB', 'ON', 'PE', 'NB', 'NS', 'QC', 'BC', 'NT', 'NF']
+        self.values = []
+        self.prices = {}
 
     def scrape_gas(self):
         "Grabs html from gas site for parsing"
@@ -26,14 +16,19 @@ class GasPrice(object):
         raw = requests.get('http://www.gasbuddy.com/CAN')
         soup = BeautifulSoup(raw.content, 'html.parser')
 
-        # self.final = {province: self.get_by_province(soup, province for province in self.provinces)}
+        for prov in self.provinces:
+            self.get_by_province(soup=soup, province=prov)
 
-        for key in self.prices.items():
-            self.get_by_province(soup, key)
+        self.prices = dict(zip(self.provinces, self.values))
+        print(self.prices)
 
     def get_by_province(self, soup, province):
         "Looping and parsing through html 'soup' object"
 
         # Soup DOM traversal
         value = soup.find(id=province)('div')[2].string.strip()
-        self.prices[province] = value
+        self.values.append(value)
+
+
+gas = GasPrice()
+gas.scrape_gas()
